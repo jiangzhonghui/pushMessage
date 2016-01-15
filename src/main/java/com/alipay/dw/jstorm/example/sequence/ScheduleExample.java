@@ -45,7 +45,8 @@ public class ScheduleExample {
             LOG.info("Error Message: " + e.getErrorMessage());
         }
     }
-
+    
+    
     public static void testCreateDailySchedule() {
         JPushClient jPushClient = new JPushClient(masterSecret, appKey);
         String name = "test_daily_schedule";

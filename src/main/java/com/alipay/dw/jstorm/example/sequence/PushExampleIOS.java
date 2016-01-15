@@ -14,6 +14,7 @@ import cn.jpush.api.push.model.Message;
 import cn.jpush.api.push.model.Options;
 import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
+import cn.jpush.api.push.model.PushPayload.Builder;
 import cn.jpush.api.push.model.audience.Audience;
 import cn.jpush.api.push.model.audience.AudienceTarget;
 import cn.jpush.api.push.model.notification.AndroidNotification;
@@ -22,15 +23,15 @@ import cn.jpush.api.push.model.notification.Notification;
 
 import java.util.HashMap;
 
-public class PushExample {
-    protected static final Logger LOG = LoggerFactory.getLogger(PushExample.class);
+public class PushExampleIOS {
+    protected static final Logger LOG = LoggerFactory.getLogger(PushExampleIOS.class);
 
     // demo App defined in resources/jpush-api.conf 
-    private static final String appKey ="bd9d309aa8aec9ddd566a8c2";
-    private static final String masterSecret = "764f1aa4b5338b97992a7ba4";
+    //private static final String appKey ="bd9d309aa8aec9ddd566a8c2";
+    //private static final String masterSecret = "764f1aa4b5338b97992a7ba4";
     
-    //private static final String appKey ="98bf4bc8bbb9e7aa847b4066";
-    //private static final String masterSecret = "c1a30dad0d49bf9a690e2b78";
+    private static final String appKey ="98bf4bc8bbb9e7aa847b4066";
+    private static final String masterSecret = "c1a30dad0d49bf9a690e2b78";
    
 	
 	public static final String TITLE = "Test from API example";
@@ -70,25 +71,17 @@ public class PushExample {
 	}
 	
 	public static PushPayload buildPushObject_all_all_alert(String alert) {
-		return PushPayload.newBuilder().setPlatform(Platform.all())
+	    //return PushPayload.alertAll(alert);
+	    
+	    return new Builder()
+        .setPlatform(Platform.all())
         .setAudience(Audience.all())
-        .setNotification(Notification.alert(alert)).build();
+        .setNotification(Notification.newBuilder()
+        					.setAlert(alert).
+        					addPlatformNotification(IosNotification.newBuilder()
+                    				.incrBadge(1).setSound("ding.mp3").build())
+        					.build()).build();
 	}
-	
-	public static PushPayload buildPushObject_android_and_ios(String alert) {
-        return PushPayload.newBuilder()
-                .setPlatform(Platform.android_ios())
-                .setAudience(Audience.tag("tag1"))
-                .setNotification(Notification.newBuilder()
-                		.setAlert(alert)
-                		.addPlatformNotification(AndroidNotification.newBuilder()
-                				.setTitle("Tradstation Message").build())
-                		.addPlatformNotification(IosNotification.newBuilder()
-                				.incrBadge(1)
-                				.addExtra("extra_key", "extra_value").build())
-                		.build())
-                .build();
-    }
 	
     public static PushPayload buildPushObject_all_alias_alert() {
         return PushPayload.newBuilder()

@@ -11,13 +11,24 @@ import org.subethamail.smtp.MessageContext;
 import org.subethamail.smtp.MessageHandler;
 import org.subethamail.smtp.MessageHandlerFactory;
 import org.subethamail.smtp.RejectException;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 
 public class MyMessageHandlerFactory implements MessageHandlerFactory {
 	
 	private boolean pushMobile = false;
+	private String mobile;
 	
-	
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 
 	public boolean isPushMobile() {
 		return pushMobile;
@@ -55,14 +66,41 @@ public class MyMessageHandlerFactory implements MessageHandlerFactory {
             int start_index = mail.indexOf("7bit");
         	int end_index = mail.indexOf("Workspace");
         	if(start_index>0){
-        		mail = mail.substring(start_index + 4);
+        		mail = mail.substring(start_index + 4).trim();
         	}
         	
-            LOG.info(mail);
+            LOG.info(mail.trim());
             if(pushMobile){
-            	PushExample.testSendPush(mail);
+            	PushExample.testSendPush(mail.trim());
+            	PushExampleIOS.testSendPush(mail.trim());
+            	String alert= mail.trim();
+            	if(alert.length()>=61){
+            		alert = alert.substring(0,60);
+    			}
+            	try{
+            		YunPian.sendTSSmsMessage(mobile, alert);
+            		System.out.println("短信发送完成");
+            	}catch(Exception ex){
+            		System.out.println(ex.getMessage());
+            		System.out.println("短信发送错误");
+            	}
+            	
+//            	String url  = "http://42.96.142.170:8099/rest/tspushserver/sms_message?message="+mail.trim()+"&mobile="+mobile;
+//            	String response = HttpRequest.get(url).body();
+//            	System.out.println(url);
+//            	System.out.println(response);
+//            	LOG.info(response);
+//            	Gson gson = new Gson();
+//            	APIResponse dataResponse = gson.fromJson(response,
+//    					new TypeToken<APIResponse>() {
+//    					}.getType());
+//            	if(dataResponse.getMeta().getCode()==0){
+//            		System.out.println("短信发送完成");
+//            	}else{
+//            		System.out.println("短信发送错误");
+//            	}
             }
-            System.out.println(mail);
+            System.out.println(mail.trim());
             System.out.println("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =");
         }
 

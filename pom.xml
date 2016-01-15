@@ -62,7 +62,17 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
 		</dependency>
-
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.3.5</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.github.kevinsawicki</groupId>
+		    <artifactId>http-request</artifactId>
+		    <version>6.0</version>
+		</dependency>
 
 		<!-- <dependency> <groupId>org.clojure</groupId> <artifactId>clojure</artifactId> 
 			<version>1.2.0</version> </dependency> <dependency> <groupId>org.clojure</groupId> 

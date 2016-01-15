@@ -18,16 +18,30 @@ public class SequenceTopology {
 	public final static String TOPOLOGY_BOLT_PARALLELISM_HINT = "bolt.parallel";
 
 	public static void main(String[] args) throws Exception {
-		if (args.length == 0) {
-			System.err.println("Please input configuration file");
-			System.exit(-1);
+		//if (args.length == 0) {
+		//	System.err.println("Please input configuration file");
+		//	System.exit(-1);
+		//}
+		
+		String channel = "mobile";
+		String mobile = "";
+		if(args.length>0){
+			channel = args[0];
+			if(args.length>1){
+				mobile = args[1];
+			}
 		}
-
+		LOG.debug(mobile);
 		LOG.debug("test");
 		LOG.info("Submit log");
+		//YunPian.sendTSSmsMessage("13928081843","交易提醒测试");
+		//PushExample.testSendPush("Startup for Android Push");
+    	//PushExampleIOS.testSendPush("Startup for IOS Push");
+    	//PushExampleIOS.buildPushObject_ios_tagAnd_alertWithExtrasAndMessage();
 		
-		MyMessageHandlerFactory myFactory = new MyMessageHandlerFactory() ;
-		if(args[0].equals("mobile")){
+		MyMessageHandlerFactory myFactory = new MyMessageHandlerFactory();
+		myFactory.setMobile(mobile);
+		if(channel.equals("mobile")){
 			LOG.info("setPushMobile true");
 			myFactory.setPushMobile(true);
 		}else{
